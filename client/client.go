@@ -17,9 +17,9 @@ type Client struct {
 	logger *logger.Logger
 }
 
-func NewClient(tunnelNum int, endpoint string, cipher tunnel.Cipher) Client {
+func NewClient(tunnelNum int, endpoints []string, cipher tunnel.Cipher) Client {
 	return Client{
-		peer:   peer.NewClientPeer(tunnelNum, endpoint, cipher),
+		peer:   peer.NewClientPeer(tunnelNum, endpoints, cipher),
 		logger: logger.NewLogger("[Client]"),
 	}
 }
