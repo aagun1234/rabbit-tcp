@@ -13,18 +13,18 @@ type ClientPeer struct {
 	Peer
 }
 
-func NewClientPeer(tunnelNum int, endpoint string, cipher tunnel.Cipher) ClientPeer {
+func NewClientPeer(tunnelNum int, endpoints []string, cipher tunnel.Cipher) ClientPeer {
 	if initRand() != nil {
 		panic("Error when initialize random seed.")
 	}
 	peerID := rand.Uint32()
-	return newClientPeerWithID(peerID, tunnelNum, endpoint, cipher)
+	return newClientPeerWithID(peerID, tunnelNum, endpoints, cipher)
 }
 
-func newClientPeerWithID(peerID uint32, tunnelNum int, endpoint string, cipher tunnel.Cipher) ClientPeer {
+func newClientPeerWithID(peerID uint32, tunnelNum int, endpoints []string, cipher tunnel.Cipher) ClientPeer {
 	peerCtx, removePeerFunc := context.WithCancel(context.Background())
 
-	poolManager := tunnel_pool.NewClientManager(tunnelNum, endpoint, peerID, cipher)
+	poolManager := tunnel_pool.NewClientManager(tunnelNum, endpoints, peerID, cipher)
 	tunnelPool := tunnel_pool.NewTunnelPool(peerID, &poolManager, peerCtx)
 	connectionPool := connection_pool.NewConnectionPool(tunnelPool, false, peerCtx)
 
