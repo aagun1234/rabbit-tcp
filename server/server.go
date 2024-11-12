@@ -18,21 +18,27 @@ func NewServer(cipher tunnel.Cipher) Server {
 		logger:    logger.NewLogger("[Server]"),
 	}
 }
-
-func (s *Server) Serve(address string) error {
+func ServeThread(address string, ss Server ) error {
 	listener, err := net.Listen("tcp", address)
 	if err != nil {
 		return err
 	}
+	defer listener.Close()
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
-			s.logger.Errorf("Error when accept connection: %v.\n", err)
+			ss.logger.Errorf("Error when accept connection: %v.\n", err)
 			continue
 		}
-		err = s.peerGroup.AddTunnelFromConn(conn)
+		err = ss.peerGroup.AddTunnelFromConn(conn)
 		if err != nil {
-			s.logger.Errorf("Error when add tunnel to tunnel pool: %v.\n", err)
+			ss.logger.Errorf("Error when add tunnel to tunnel pool: %v.\n", err)
 		}
 	}
+}
+func (s *Server) Serve(addresses []string) error {
+	for _,address:= range addresses {
+		go error=ServeThread(address,s)
+	}
+	return 
 }
