@@ -18,7 +18,7 @@ type Manager interface {
 type ClientManager struct {
 	decreaseNotifyLock sync.Mutex // Only one decrease notify can run at the same time
 	tunnelNum          int
-	endpoints           []string
+	endpoints          []string
 	peerID             uint32
 	cipher             tunnel.Cipher
 	logger             *logger.Logger
@@ -39,37 +39,63 @@ func (cm *ClientManager) DecreaseNotify(pool *TunnelPool) {
 	cm.decreaseNotifyLock.Lock()
 	defer cm.decreaseNotifyLock.Unlock()
 	tunnelCount := len(pool.tunnelMapping)
-    for tunnelToCreate := cm.tunnelNum - tunnelCount; tunnelToCreate > 0; {
-	    endpoint:=cm.endpoints[tunnelToCreate%cm.endpoints]
-				select {
-				case <-pool.ctx.Done():
-				// Have to return if pool cancel is called.
-					return
-				default:
-				}
-				// if initRand() != nil {
-					// panic("Error when initialize random seed.")
-				// }
-				// cm.peerID := rand.Uint32()
-			if tunnelToCreate > 0 {
-				cm.logger.Infof("Need %d new tunnels to %s now.\n", tunnelToCreate,endpoint )
-				conn, err := net.Dial("tcp", cm.endpoint)
-				if err != nil {
-					cm.logger.Errorf("Error when dial to %s: %v.\n", cm.endpoint, err)
-					time.Sleep(ErrorWaitSec * time.Second)
-					continue
-				}
-				tun, err := NewActiveTunnel(conn, cm.cipher, cm.peerID)
-				if err != nil {
-					cm.logger.Errorf("Error when create active tunnel: %v\n", err)
-					time.Sleep(ErrorWaitSec * time.Second)
-					continue
-				}
-				pool.AddTunnel(&tun)
-				tunnelToCreate--
-				cm.logger.Infof("Successfully dialed to %s. TunnelToCreate: %d\n", cm.endpoint, tunnelToCreate)
-			}
+	lastfailed:=""
+	
+	for tunnelToCreate := cm.tunnelNum - tunnelCount; tunnelToCreate > 0; {
 		
+		select {
+		case <-pool.ctx.Done():
+			// Have to return if pool cancel is called.
+			return
+		default:
+		}
+		endpoint:=""
+		curindex:=0
+		if len(cm.endpoints) >0 {
+			curindex=(tunnelToCreate-1)%len(cm.endpoints)
+			endpoint=cm.endpoints[curindex]
+		} else {
+			endpoint=""
+			curindex=0
+		}
+		if endpoint!="" {
+			cm.logger.Infof("Need %d new tunnels to %s now.\n", tunnelToCreate,endpoint)
+			dialTimeout := 5 * time.Second
+			conn, err := net.DialTimeout("tcp", endpoint, dialTimeout)
+			//conn, err := net.Dial("tcp", endpoint) //cm.endpoint)
+			if err != nil {
+				cm.logger.Errorf("Error when dial to %s: %v.\n", endpoint, err)
+				if lastfailed==endpoint {// if second time fail to endpoint
+					if curindex == (len(cm.endpoints)-1) { // move last endpoint to first
+						cm.endpoints[curindex]=cm.endpoints[0]
+						cm.endpoints[0] = endpoint
+					} else { 
+					// going to reconnect to last success endpoint, move current failed endpoint to an older position
+						cm.endpoints[curindex]=cm.endpoints[curindex+1]
+						cm.endpoints[curindex+1]=endpoint
+					}
+					cm.logger.Errorf(" %s moved to last.\n", endpoint)
+					continue
+				}
+				time.Sleep(ErrorWaitSec * time.Second)
+				lastfailed=endpoint
+				continue
+			}
+			if lastfailed==endpoint {
+				lastfailed="" //last failed successed, reset
+			}
+			tun, err := NewActiveTunnel(conn, cm.cipher, cm.peerID)
+			if err != nil {
+				cm.logger.Errorf("Error when create active tunnel: %v\n", err)
+				time.Sleep(ErrorWaitSec * time.Second)
+				continue
+			}
+			cm.logger.Infof("ClientManager DecreaseNotify Set ReadDeadLine unlimit.\n")
+			conn.SetReadDeadline(time.Time{})
+			pool.AddTunnel(&tun)
+			tunnelToCreate--
+			cm.logger.Infof("Successfully dialed to %s. TunnelToCreate: %d\n", endpoint, tunnelToCreate)
+		}
 	}
 }
 
