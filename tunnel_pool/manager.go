@@ -2,8 +2,8 @@ package tunnel_pool
 
 import (
 	"context"
-	"github.com/aagun1234/rabbit-tcp/logger"
-	"github.com/aagun1234/rabbit-tcp/tunnel"
+	"github.com/ihciah/rabbit-tcp/logger"
+	"github.com/ihciah/rabbit-tcp/tunnel"
 	"go.uber.org/atomic"
 	"net"
 	"sync"

@@ -1,12 +1,12 @@
 package server
 
 import (
-	"github.com/aagun1234/rabbit-tcp/logger"
-	"github.com/aagun1234/rabbit-tcp/peer"
-	"github.com/aagun1234/rabbit-tcp/tunnel"
+	"github.com/ihciah/rabbit-tcp/logger"
+	"github.com/ihciah/rabbit-tcp/peer"
+	"github.com/ihciah/rabbit-tcp/tunnel"
 	"net"
+	"sync"
 )
-
 type Server struct {
 	peerGroup peer.PeerGroup
 	logger    *logger.Logger
@@ -18,7 +18,10 @@ func NewServer(cipher tunnel.Cipher) Server {
 		logger:    logger.NewLogger("[Server]"),
 	}
 }
-func ServeThread(address string, ss Server ) error {
+
+
+func ServeThread(address string, ss *Server, wg *sync.WaitGroup) error {
+	defer wg.Done()
 	listener, err := net.Listen("tcp", address)
 	if err != nil {
 		return err
@@ -37,8 +40,11 @@ func ServeThread(address string, ss Server ) error {
 	}
 }
 func (s *Server) Serve(addresses []string) error {
+        var wg sync.WaitGroup
 	for _,address:= range addresses {
-		go error=ServeThread(address,s)
+		wg.Add(1)
+		go ServeThread(address,s, &wg)
 	}
-	return 
+	wg.Wait()
+	return nil
 }

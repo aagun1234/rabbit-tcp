@@ -6,9 +6,9 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
-	"github.com/aagun1234/rabbit-tcp/block"
-	"github.com/aagun1234/rabbit-tcp/logger"
-	"github.com/aagun1234/rabbit-tcp/tunnel"
+	"github.com/ihciah/rabbit-tcp/block"
+	"github.com/ihciah/rabbit-tcp/logger"
+	"github.com/ihciah/rabbit-tcp/tunnel"
 	"io"
 	"math/rand"
 	"net"
@@ -97,7 +97,12 @@ func (tunnel *Tunnel) sendPeerID(peerID uint32) error {
 
 func (tunnel *Tunnel) recvPeerID() (uint32, error) {
 	peerIDBuffer := make([]byte, 4)
+	tunnel.logger.Debugf("recvPeerID Set tunnel.Conn ReadDeadline 30S.\n")
+	deadline := time.Now().Add(30 * time.Second)
+	tunnel.Conn.SetReadDeadline(deadline)
 	_, err := io.ReadFull(tunnel.Conn, peerIDBuffer)
+	tunnel.logger.Debugf("recvPeerID Set tunnel.Conn ReadDeadline unlimit.\n")
+	tunnel.Conn.SetReadDeadline(time.Time{})
 	if err != nil {
 		tunnel.logger.Errorf("Peer id recv with error:%v.\n", err)
 		return 0, err

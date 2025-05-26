@@ -7,8 +7,8 @@ import (
 	"net"
 	"time"
 
-	"github.com/aagun1234/rabbit-tcp/block"
-	"github.com/aagun1234/rabbit-tcp/logger"
+	"github.com/ihciah/rabbit-tcp/block"
+	"github.com/ihciah/rabbit-tcp/logger"
 	"go.uber.org/atomic"
 )
 
@@ -141,7 +141,9 @@ func (oc *OutboundConnection) connect(address string) {
 	if !oc.closed.Load() || oc.HalfOpenConn != nil {
 		return
 	}
-	rawConn, err := net.Dial("tcp", address)
+	dialTimeout := 5 * time.Second
+	rawConn, err := net.DialTimeout("tcp", address, dialTimeout)
+	//rawConn, err := net.Dial("tcp", address)
 	if err == nil {
 		oc.logger.Infof("Dial to %s successfully.\n", address)
 		oc.HalfOpenConn = rawConn.(*net.TCPConn)

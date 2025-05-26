@@ -2,15 +2,15 @@ package connection_pool
 
 import (
 	"context"
-	"github.com/aagun1234/rabbit-tcp/block"
-	"github.com/aagun1234/rabbit-tcp/connection"
-	"github.com/aagun1234/rabbit-tcp/logger"
-	"github.com/aagun1234/rabbit-tcp/tunnel_pool"
+	"github.com/ihciah/rabbit-tcp/block"
+	"github.com/ihciah/rabbit-tcp/connection"
+	"github.com/ihciah/rabbit-tcp/logger"
+	"github.com/ihciah/rabbit-tcp/tunnel_pool"
 	"sync"
 )
 
 const (
-	SendQueueSize = 48 // SendQueue channel cap
+	SendQueueSize = 64 // SendQueue channel cap
 )
 
 type ConnectionPool struct {

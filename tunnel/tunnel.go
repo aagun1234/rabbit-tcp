@@ -9,7 +9,7 @@ import (
 )
 
 // payloadSizeMask is the maximum size of payload in bytes.
-const payloadSizeMask = 0x3FFF // 16*1024 - 1
+const payloadSizeMask = 0x7FFF // 16*1024 - 1
 
 type writer struct {
 	io.Writer

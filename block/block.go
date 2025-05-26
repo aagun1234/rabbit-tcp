@@ -17,7 +17,7 @@ const (
 	ShutdownBoth
 
 	HeaderSize = 1 + 4 + 4 + 4
-	DataSize   = 16*1024 - 13
+	DataSize   = 32*1024 - 13
 	MaxSize    = HeaderSize + DataSize
 )
 
