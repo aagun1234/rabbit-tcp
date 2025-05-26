@@ -1,4 +1,4 @@
-module github.com/ihciah/rabbit-tcp
+module github.com/aagun1234/rabbit-tcp
 
 go 1.13
 

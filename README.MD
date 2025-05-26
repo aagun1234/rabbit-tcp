@@ -1,6 +1,6 @@
 # Rabbit TCP
 
-![Build badge](https://github.com/ihciah/rabbit-tcp/workflows/Build/badge.svg) ![Docker pull badge](https://img.shields.io/docker/pulls/ihciah/rabbit)
+![Build badge](https://github.com/aagun1234/rabbit-tcp/workflows/Build/badge.svg) ![Docker pull badge](https://img.shields.io/docker/pulls/ihciah/rabbit)
 
 A multi-connection TCP forwarder created for accelerating TCP connections
 
@@ -19,12 +19,12 @@ This project the extension of the accelerating method of [ShadowSocks-magic](htt
 ## Get Started
 This project can work in standalone proxy mode or inline in other Golang code.
 
-Here are two common usage examples. For detailed documentation, please go to the [Wiki](https://github.com/ihciah/rabbit-tcp/wiki).
+Here are two common usage examples. For detailed documentation, please go to the [Wiki](https://github.com/aagun1234/rabbit-tcp/wiki).
 
 ### Accelerate any TCP service in a standalone proxy mode
 #### Server side
 1. Install [Docker](https://docs.docker.com/install/linux/docker-ce/debian/#install-using-the-convenience-script) and [docker-compose](https://docs.docker.com/compose/install/)
-2. Download and edit `docker-compose-server.yml` ([Link](https://github.com/ihciah/rabbit-tcp/raw/master/docker-compose-server.yml))
+2. Download and edit `docker-compose-server.yml` ([Link](https://github.com/aagun1234/rabbit-tcp/raw/master/docker-compose-server.yml))
     ```yaml
     rabbit-server:
       image: ihciah/rabbit
@@ -43,7 +43,7 @@ Here are two common usage examples. For detailed documentation, please go to the
 
 #### Client side
 1. Install [Docker](https://docs.docker.com/install/linux/docker-ce/debian/#install-using-the-convenience-script) and [docker-compose](https://docs.docker.com/compose/install/)
-2. Download and edit `docker-compose-client.yml` ([Link](https://github.com/ihciah/rabbit-tcp/raw/master/docker-compose-client.yml))
+2. Download and edit `docker-compose-client.yml` ([Link](https://github.com/aagun1234/rabbit-tcp/raw/master/docker-compose-client.yml))
     ```yaml
     rabbit-client:
       image: ihciah/rabbit
