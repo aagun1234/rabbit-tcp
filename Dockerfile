@@ -21,7 +21,7 @@ ENV DEST=
 ENV TUNNELN 6
 ENV VERBOSE 2
 
-COPY --from=builder /go/src/github.com/ihciah/rabbit-tcp/bin/rabbit /usr/bin/rabbit
+COPY --from=builder /go/src/github.com/aagun1234/rabbit-tcp/bin/rabbit /usr/bin/rabbit
 
 CMD exec rabbit \
       --mode=$MODE \

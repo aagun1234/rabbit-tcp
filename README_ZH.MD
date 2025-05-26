@@ -1,6 +1,6 @@
 # Rabbit TCP
 
-![Build badge](https://github.com/ihciah/rabbit-tcp/workflows/Build/badge.svg) ![Docker pull badge](https://img.shields.io/docker/pulls/ihciah/rabbit)
+![Build badge](https://github.com/aagun1234/rabbit-tcp/workflows/Build/badge.svg) ![Docker pull badge](https://img.shields.io/docker/pulls/ihciah/rabbit)
 
 一个为加速而生的多连接 TCP 转发器
 
@@ -19,12 +19,12 @@
 ## 开始使用
 本项目既可以以独立代理模式工作，也可以内嵌在其他 Golang 代码中提供服务。
 
-以下列举两种常用用法，详细的文档请移步 [Wiki](https://github.com/ihciah/rabbit-tcp/wiki)。
+以下列举两种常用用法，详细的文档请移步 [Wiki](https://github.com/aagun1234/rabbit-tcp/wiki)。
 
 ### 以独立代理模式加速任意 TCP 服务
 #### 服务端
 1. 安装 [Docker](https://docs.docker.com/install/linux/docker-ce/debian/#install-using-the-convenience-script) 和 [docker-compose](https://docs.docker.com/compose/install/)
-2. 下载并修改 `docker-compose-server.yml` 文件([链接](https://github.com/ihciah/rabbit-tcp/raw/master/docker-compose-server.yml))
+2. 下载并修改 `docker-compose-server.yml` 文件([链接](https://github.com/aagun1234/rabbit-tcp/raw/master/docker-compose-server.yml))
     ```yaml
     rabbit-server:
       image: ihciah/rabbit
@@ -43,7 +43,7 @@
 
 #### 客户端
 1. 安装 [Docker](https://docs.docker.com/install/linux/docker-ce/debian/#install-using-the-convenience-script) 和 [docker-compose](https://docs.docker.com/compose/install/)
-2. 下载并修改 `docker-compose-client.yml` 文件([链接](https://github.com/ihciah/rabbit-tcp/raw/master/docker-compose-client.yml))
+2. 下载并修改 `docker-compose-client.yml` 文件([链接](https://github.com/aagun1234/rabbit-tcp/raw/master/docker-compose-client.yml))
     ```yaml
     rabbit-client:
       image: ihciah/rabbit

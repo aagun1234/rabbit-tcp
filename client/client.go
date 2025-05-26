@@ -6,10 +6,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ihciah/rabbit-tcp/connection"
-	"github.com/ihciah/rabbit-tcp/logger"
-	"github.com/ihciah/rabbit-tcp/peer"
-	"github.com/ihciah/rabbit-tcp/tunnel"
+	"github.com/aagun1234/rabbit-tcp/connection"
+	"github.com/aagun1234/rabbit-tcp/logger"
+	"github.com/aagun1234/rabbit-tcp/peer"
+	"github.com/aagun1234/rabbit-tcp/tunnel"
 )
 
 type Client struct {
