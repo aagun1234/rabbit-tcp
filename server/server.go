@@ -43,6 +43,7 @@ func (s *Server) Serve(addresses []string) error {
         var wg sync.WaitGroup
 	for _,address:= range addresses {
 		wg.Add(1)
+		logger.Infof("Serve on %s\n",address)
 		go ServeThread(address,s, &wg)
 	}
 	wg.Wait()
